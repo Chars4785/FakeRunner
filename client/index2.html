@@ -1,0 +1,252 @@
+<html>
+<style>
+    #ctx {
+        border: 1px solid #000000;
+        float: left;
+    }
+    
+    #table {
+        float: left;
+        width: 200px;
+        height: 600px;
+        border: 1px solid #000000;
+        overflow-y: scroll;
+    }
+    
+    #inform {
+        float: left;
+        width: 800px;
+        height: 200px;
+        border: 1px solid #000000;
+    }
+    
+    #chat-text {
+        width: 800px;
+        height: 200px;
+        overflow-y: scroll
+    }
+    
+    #chat-input {
+        width: 800
+    }
+</style>
+
+
+<!-- <div id="signDiv" style="display:inline-block;">
+
+    Username: <input id="signDiv-username" type="text"></input><br>
+
+    <button id="signDiv-signIn">Sign In</button>
+
+</div> -->
+
+<div id="gameDiv">
+
+    <canvas id="ctx" width="600" height="600"></canvas>
+
+    <div id="table">
+
+    </div>
+
+    <div id="inform">
+        <h5>1. 총알 10개 입니다. HP:1입니다. </h5>
+        <h5>2. 죽으면 다시 접속 하시면 됩니다. 진짜를 찾아 죽이세요 죽이면 Score 가 올라갑니다. AI 죽이면 점수 없고 총알 사용하는 겁니다. </h5>
+        <h5>3. 방향키로 움직이고, 마우스로 쏘세요 </h5>
+        <h5>tip. 화면 밖으로 나갈수 있습니다. 전체화면으로 하세요. AI인척 하세요. </h5>
+    </div>
+
+
+
+    <div style="position:absolute;top:700px;">
+
+        <div id="chat-text">
+
+        </div>
+
+        <form id="chat-form">
+            <input id="chat-input" type="text"></input>
+        </form>
+    </div>
+
+</div>
+
+
+
+</html>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+<script>
+    //'inline-block'
+    var socket = io();
+    var imageW = 228 / 6;
+    var imageH = 47;
+    var chctHp;
+    var chctBullet;
+    var table = document.getElementById('table');
+    var chatText = document.getElementById('chat-text');
+
+    var chatInput = document.getElementById('chat-input');
+    var chatForm = document.getElementById('chat-form');
+
+    var scroe = document.getElementById('table');
+
+    var ctx = document.getElementById("ctx").getContext("2d");
+    ctx.font = '30px Arial';
+
+    var chctimage = new Image();
+    chctimage.src = '/client/img/chct.png';
+
+    var chc = new Image();
+    chc.src = '/client/img/chct2.png';
+
+
+    var signDiv = document.getElementById('signDiv');
+    var signDivUsername = document.getElementById('signDiv-username');
+    var signDivSignIn = document.getElementById('signDiv-signIn');
+
+    // signDivSignIn.onclick = function() {
+    //     socket.emit('signIn', {
+    //         id: signDivUsername.value
+    //             //id: 'lee'
+    //     });
+    // }
+
+    socket.emit('signIn', {
+        //id: signDivUsername.value
+        id: 'lee'
+    });
+
+    // socket.on('signInResponse', function(data) {
+    //     if (data.success) {
+    //         signDiv.style.display = 'none';
+    //         gameDiv.style.display = 'inline-block';
+    //     } else
+    //         alert("이미 있음");
+    // });
+
+
+
+    // socket.on('rank', function(data) {
+
+    //     for (var i = 0; i < data.length; i++) {
+    //         table.innerHTML += '<div>' + "rank:" + (i + 1) + "    " + data[i].id + '</div>' + '<div>' + "score:   " + data[i].score + '</div>' + '<hr>';
+    //     }
+    // });
+
+
+
+    socket.on('newPositions', function(data) {
+        ctx.clearRect(0, 0, 600, 600);
+
+
+        for (var i = 0; i < data.enemy.length; i++) {
+
+            ctx.drawImage(chc, data.enemy[i].keyX, data.enemy[i].keyY,
+                imageW, imageH, data.enemy[i].x, data.enemy[i].y, imageW, imageH);
+
+        }
+
+
+        for (var i = 0; i < data.player.length; i++) {
+            ctx.drawImage(chctimage, data.player[i].keyX, data.player[i].keyY, imageW, imageH, data.player[i].x, data.player[i].y, imageW, imageH);
+
+
+        }
+
+        for (var i = 0; i < data.bullet.length; i++) {
+            ctx.fillRect(data.bullet[i].x + 10, data.bullet[i].y + 10, 10, 10);
+        }
+
+    });
+
+
+    socket.on('addToChat', function(data) {
+        chatText.innerHTML += '<div>' + data + '</div>';
+        chatText.scrollTop = chatText.scrollHeight;
+    });
+
+    socket.on('evalAnswer', function(data) {
+        console.log(data);
+    });
+
+
+    chatForm.onsubmit = function(e) {
+        e.preventDefault();
+        if (chatInput.value[0] === '/')
+            socket.emit('evalServer', chatInput.value.slice(1));
+        else
+            socket.emit('sendMsgToServer', chatInput.value);
+        chatInput.value = '';
+    }
+
+    document.onkeydown = function(event) {
+        if (event.keyCode === 39) //오른쪽
+            socket.emit('keyPress', {
+            inputId: 'right',
+            state: true
+        });
+        else if (event.keyCode === 40) //밑
+            socket.emit('keyPress', {
+            inputId: 'down',
+            state: true
+        });
+        else if (event.keyCode === 37) //왼쪽
+            socket.emit('keyPress', {
+            inputId: 'left',
+            state: true
+        });
+        else if (event.keyCode === 38) // 위
+            socket.emit('keyPress', {
+            inputId: 'up',
+            state: true
+        });
+
+    }
+    document.onkeyup = function(event) {
+        if (event.keyCode === 39) //오른쪽
+            socket.emit('keyPress', {
+            inputId: 'right',
+            state: false
+        });
+        else if (event.keyCode === 40) //밑
+            socket.emit('keyPress', {
+            inputId: 'down',
+            state: false
+        });
+        else if (event.keyCode === 37) //왼쪽
+            socket.emit('keyPress', {
+            inputId: 'left',
+            state: false
+        });
+        else if (event.keyCode === 38) // 위
+            socket.emit('keyPress', {
+            inputId: 'up',
+            state: false
+        });
+    }
+
+    document.onmousedown = function(event) {
+        socket.emit('keyPress', {
+            inputId: 'attack',
+            state: true
+        });
+    }
+    document.onmouseup = function(event) {
+        socket.emit('keyPress', {
+            inputId: 'attack',
+            state: false
+        });
+    }
+    document.onmousemove = function(event) {
+        var x = -250 + event.clientX - 8;
+        var y = -250 + event.clientY - 8;
+        var angle = Math.atan2(y, x) / Math.PI * 180;
+        socket.emit('keyPress', {
+            inputId: 'mouseAngle',
+            state: angle
+        });
+    }
+</script>
+
+</html>
