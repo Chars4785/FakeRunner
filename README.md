@@ -1,4 +1,5 @@
-<center>![그림1](https://user-images.githubusercontent.com/24587071/64923221-cfdeb200-d812-11e9-96c6-29a6e7aa59d5.png)</center>
+![그림1](https://user-images.githubusercontent.com/24587071/64923221-cfdeb200-d812-11e9-96c6-29a6e7aa59d5.png){: width="100%" height="100%"}
+
 
 ## FakeRunner
 게임 방법
@@ -21,10 +22,11 @@
 - JavaScript
 ```
 
-# AWS에 올려지만 현재는 닫혀 있습니다.
 
-# 개발 과정
+
+## 개발 과정
 
 - 아이디가 있으면 접속 가능
 - mongoDB 와 AWS 서버를 통해서 랭킹시스템과 멀티게임을 진행 하도록 했습니다.
 
+## AWS에 올려지만 현재는 닫혀 있습니다.
