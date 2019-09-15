@@ -1,4 +1,4 @@
-![그림1](https://user-images.githubusercontent.com/24587071/64923221-cfdeb200-d812-11e9-96c6-29a6e7aa59d5.png)
+<center>![그림1](https://user-images.githubusercontent.com/24587071/64923221-cfdeb200-d812-11e9-96c6-29a6e7aa59d5.png)</center>
 
 ## FakeRunner
 게임 방법
@@ -8,7 +8,8 @@
 
 백엔드
 > ./app.js
-````
+
+```
 - node.js
 - express 서버 
 - http 
