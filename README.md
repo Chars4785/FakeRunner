@@ -1,4 +1,4 @@
-<center><img src="https://user-images.githubusercontent.com/24587071/64923221-cfdeb200-d812-11e9-96c6-29a6e7aa59d5.png" width="300" height="300"></center>
+<center><img src="https://user-images.githubusercontent.com/24587071/64923221-cfdeb200-d812-11e9-96c6-29a6e7aa59d5.png" width="100%" height="100%"></center>
 
 ## FakeRunner
 게임 방법
