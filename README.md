@@ -1,6 +1,5 @@
-![title](https://user-images.githubusercontent.com/24587071/64923221-cfdeb200-d812-11e9-96c6-29a6e7aa59d5.png){:width="100%" height="100%"}
 
-
+<center><img src="https://user-images.githubusercontent.com/24587071/64923221-cfdeb200-d812-11e9-96c6-29a6e7aa59d5.png"></center>
 ## FakeRunner
 게임 방법
 - 접속을 하고 여러 개의 AI 중에서 상대 플레이어가 존재한다. 진짜를 찾아 총알을 쏘는 게임
